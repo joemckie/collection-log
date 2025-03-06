@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import collectionLogFixture from '@/mocks/collection-log/cousinofkos.json';
+import collectionLogFixture from '@/../mocks/fixtures/collection-log.json';
 
 export async function GET(
   _request: NextRequest,
