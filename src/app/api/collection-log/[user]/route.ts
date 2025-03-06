@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/redis';
 import { CollectionLog } from '@/schemas/collection-log.schema';
 
+type Params = Promise<{ user: string }>;
+
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ user: string }> },
+  { params }: { params: Params },
 ) {
   const { user } = await params;
 
@@ -15,7 +17,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ user: string }> },
+  { params }: { params: Params },
 ) {
   const { user } = await params;
   const data = CollectionLog.parse(await request.json());
@@ -27,7 +29,7 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ user: string }> },
+  { params }: { params: Params },
 ) {
   const { user } = await params;
 
