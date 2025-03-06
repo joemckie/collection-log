@@ -6,3 +6,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
   
   return NextResponse.json(collectionLogFixture);
 }
+
+export async function PUT() {}
+
+export async function DELETE() {}
