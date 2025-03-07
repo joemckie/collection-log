@@ -100,26 +100,49 @@ export default async function CollectionLogPage({
               orientation="vertical"
             >
               <NavigationMenu.List className="NavigationMenuList">
-                {collectionLogPageMap[currentTab].options.map((page) => (
-                  <NavigationMenu.Item key={page} className="rt-TabNavItem">
-                    <NavigationMenu.Link
-                      asChild
-                      active={page === currentPage}
-                      className="rt-reset rt-BaseTabListTrigger rt-TabNavLink"
+                {collectionLogPageMap[currentTab].options.map((page) => {
+                  const obtained = (
+                    collectionLog.tabs[currentTab] as Record<
+                      string,
+                      { items: { obtained: boolean }[] }
                     >
-                      <Box
+                  )[page].items.filter((item) => item.obtained).length;
+                  const total = (
+                    collectionLog.tabs[currentTab] as Record<
+                      string,
+                      { items: { obtained: boolean }[] }
+                    >
+                  )[page].items.length;
+
+                  return (
+                    <NavigationMenu.Item key={page} className="rt-TabNavItem">
+                      <NavigationMenu.Link
                         asChild
-                        py="1"
+                        active={page === currentPage}
+                        className="rt-reset rt-BaseTabListTrigger rt-TabNavLink"
                       >
-                        <Link
-                          href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
+                        <Text
+                          color={formatCurrentTabCountColour(obtained, total)}
                         >
-                          {page}
-                        </Link>
-                      </Box>
-                    </NavigationMenu.Link>
-                  </NavigationMenu.Item>
-                ))}
+                          <Box asChild py="1">
+                            <Link
+                              href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
+                            >
+                              <Text
+                                color={formatCurrentTabCountColour(
+                                  obtained,
+                                  total,
+                                )}
+                              >
+                                {page}
+                              </Text>
+                            </Link>
+                          </Box>
+                        </Text>
+                      </NavigationMenu.Link>
+                    </NavigationMenu.Item>
+                  );
+                })}
 
                 <NavigationMenu.Indicator className="NavigationMenuIndicator">
                   <div className="Arrow" />
