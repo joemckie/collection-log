@@ -1,3 +1,4 @@
+import { formatWikiImageUrl } from '@/app/utils/format-wiki-url';
 import { redis } from '@/redis';
 import {
   BossesTabEntry,
@@ -10,8 +11,17 @@ import {
   OtherTabEntry,
   RaidsTabEntry,
 } from '@/schemas/collection-log.schema';
-import { Card, Container, Flex, TabNav, Text } from '@radix-ui/themes';
+import {
+  Card,
+  Container,
+  Flex,
+  Grid,
+  Separator,
+  TabNav,
+  Text,
+} from '@radix-ui/themes';
 import Link from 'next/link';
+import { EntityImage } from '../components/entity-image';
 
 type Params = Promise<{ user: string }>;
 
@@ -78,18 +88,33 @@ export default async function CollectionLogPage({
             ))}
           </TabNav.Root>
           <Card>
-            <Flex direction="column" gap="1">
-              <Text>{currentPage}</Text>
-              <Text>
-                Obtained: {currentTabObtained} / {currentTabTotal}
-              </Text>
-              {currentTabContents.killCounts.map((killCount) => (
-                <Text key={killCount.name}>
-                  {killCount.name}: {killCount.amount}
+            <Grid gap="2">
+              <Flex direction="column" gap="1">
+                <Text>{currentPage}</Text>
+                <Text>
+                  Obtained: {currentTabObtained} / {currentTabTotal}
                 </Text>
-              ))}
-            </Flex>
-            <pre>{JSON.stringify(currentTabContents, null, 2)}</pre>
+                {currentTabContents.killCounts.map((killCount) => (
+                  <Text key={killCount.name}>
+                    {killCount.name}: {killCount.amount}
+                  </Text>
+                ))}
+              </Flex>
+              <Separator size="4" />
+              <Grid columns="6">
+                {currentTabContents.items.map((item) => (
+                  <Flex key={item.id} direction="column" gap="2">
+                    <EntityImage
+                      alt={`${item.name} icon`}
+                      src={formatWikiImageUrl(item.name)}
+                      fallback="?"
+                    />
+                    <Text>{item.name}</Text>
+                    <Text>{item.quantity}</Text>
+                  </Flex>
+                ))}
+              </Grid>
+            </Grid>
           </Card>
         </Flex>
       </>
