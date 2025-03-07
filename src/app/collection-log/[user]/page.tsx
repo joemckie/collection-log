@@ -71,7 +71,7 @@ export default async function CollectionLogPage({
 }: Props) {
   const { user } = await params;
   const {
-    tab: currentTab = CollectionLogTab.enum.Raids,
+    tab: currentTab = CollectionLogTab.enum.Bosses,
     page: currentPage = collectionLogPageMap[currentTab].options[0],
   } = await searchParams;
 
