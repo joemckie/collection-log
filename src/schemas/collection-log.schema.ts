@@ -199,8 +199,8 @@ export const CollectionLog = z.object({
 export type CollectionLog = z.infer<typeof CollectionLog>;
 
 export const collectionLogPageMap = {
-  [CollectionLogTab.enum.Raids]: RaidsTabEntry,
   [CollectionLogTab.enum.Bosses]: BossesTabEntry,
+  [CollectionLogTab.enum.Raids]: RaidsTabEntry,
   [CollectionLogTab.enum.Clues]: CluesTabEntry,
   [CollectionLogTab.enum.Minigames]: MinigamesTabEntry,
   [CollectionLogTab.enum.Other]: OtherTabEntry,
