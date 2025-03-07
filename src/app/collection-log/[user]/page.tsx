@@ -5,11 +5,12 @@ import {
   CollectionLog,
   collectionLogPageMap,
   CollectionLogTab,
+  CollectionLogTabContents,
   MinigamesTabEntry,
   OtherTabEntry,
   RaidsTabEntry,
 } from '@/schemas/collection-log.schema';
-import { Card, Container, Flex, TabNav } from '@radix-ui/themes';
+import { Card, Container, Flex, TabNav, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 
 type Params = Promise<{ user: string }>;
@@ -45,6 +46,12 @@ export default async function CollectionLogPage({
     throw new Error(`No collection log found for user ${user}`);
   }
 
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentTabContents = CollectionLogTabContents.parse((collectionLog.tabs[currentTab] as any)[currentPage]);
+  const currentTabObtained = currentTabContents.items.filter((item) => item.obtained).length;
+  const currentTabTotal = currentTabContents.items.length;
+
   return (
     <Container>
       <>
@@ -68,8 +75,16 @@ export default async function CollectionLogPage({
             ))}
           </TabNav.Root>
           <Card>
-            {/* @ts-expect-error dev */}
-            <pre>{JSON.stringify(collectionLog.tabs[currentTab][currentPage], null, 2)}</pre>
+            <Flex direction="column" gap="1">
+              <Text>{currentPage}</Text>
+              <Text>Obtained: {currentTabObtained} / {currentTabTotal}</Text>
+              {currentTabContents.killCounts.map((killCount) => (
+                <Text key={killCount.name}>
+                  {killCount.name}: {killCount.amount}
+                </Text>
+              ))}
+            </Flex>
+            <pre>{JSON.stringify(currentTabContents, null, 2)}</pre>
           </Card>
         </Flex>
       </>
