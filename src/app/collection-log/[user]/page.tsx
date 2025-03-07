@@ -138,6 +138,9 @@ export default async function CollectionLogPage({
                     gap="4"
                     justify="center"
                     position="relative"
+                    style={{
+                      opacity: item.quantity === 0 ? 0.5 : 1,
+                    }}
                   >
                     <EntityImage
                       alt={`${item.name} icon`}
