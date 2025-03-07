@@ -23,6 +23,7 @@ import {
 } from '@radix-ui/themes';
 import Link from 'next/link';
 import { EntityImage } from '../components/entity-image';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 type Params = Promise<{ user: string }>;
 
@@ -83,7 +84,7 @@ export default async function CollectionLogPage({
 
   return (
     <Container>
-      <>
+      <Flex direction="column" gap="2">
         <TabNav.Root>
           {Object.keys(collectionLogPageMap).map((tab) => (
             <TabNav.Link asChild active={tab === currentTab} key={tab}>
@@ -91,79 +92,106 @@ export default async function CollectionLogPage({
             </TabNav.Link>
           ))}
         </TabNav.Root>
-        <Flex direction="column" gap="2">
-          <TabNav.Root wrap="wrap">
-            {collectionLogPageMap[currentTab].options.map((page) => (
-              <TabNav.Link asChild active={page === currentPage} key={page}>
-                <Link
-                  href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
-                >
-                  {page}
-                </Link>
-              </TabNav.Link>
-            ))}
-          </TabNav.Root>
-          <Card>
-            <Grid gap="4">
-              <Flex direction="column">
-                <Text size="4" weight="medium">
-                  {currentPage}
-                </Text>
-                <Text>
-                  Obtained:{' '}
-                  <Text
-                    color={formatCurrentTabCountColour(
-                      currentTabObtained,
-                      currentTabTotal,
-                    )}
-                    weight="medium"
-                  >
-                    {currentTabObtained}/{currentTabTotal}
-                  </Text>
-                </Text>
-                {currentTabContents.killCounts.map((killCount) => (
-                  <Text key={killCount.name}>
-                    {killCount.name}:{' '}
-                    <Text weight="medium">{killCount.amount}</Text>
-                  </Text>
+        <Flex gap="2">
+          <Box asChild flexBasis="300px">
+            <NavigationMenu.Root
+              defaultValue={currentPage}
+              className="NavigationMenuRoot"
+              orientation="vertical"
+            >
+              <NavigationMenu.List className="NavigationMenuList">
+                {collectionLogPageMap[currentTab].options.map((page) => (
+                  <NavigationMenu.Item key={page} className="rt-TabNavItem">
+                    <NavigationMenu.Link
+                      asChild
+                      active={page === currentPage}
+                      className="rt-reset rt-BaseTabListTrigger rt-TabNavLink"
+                    >
+                      <Box
+                        asChild
+                        py="1"
+                      >
+                        <Link
+                          href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
+                        >
+                          {page}
+                        </Link>
+                      </Box>
+                    </NavigationMenu.Link>
+                  </NavigationMenu.Item>
                 ))}
-              </Flex>
-              <Separator size="4" />
-              <Grid columns="6" gap="6">
-                {currentTabContents.items.map((item) => (
-                  <Flex
-                    key={item.id}
-                    align="center"
-                    direction="column"
-                    gap="4"
-                    justify="center"
-                    style={{
-                      opacity: item.quantity === 0 ? 0.5 : 1,
-                    }}
-                  >
-                    <Box position="relative">
-                      <EntityImage
-                        alt={`${item.name} icon`}
-                        src={formatWikiImageUrl(item.name)}
-                        fallback="?"
-                        size="3"
-                      />
-                      {item.quantity > 0 && (
-                        <Box position="absolute" top="-12px" left="-12px">
-                          <Text color="yellow" size="2" weight="medium">
-                            {item.quantity}
-                          </Text>
-                        </Box>
+
+                <NavigationMenu.Indicator className="NavigationMenuIndicator">
+                  <div className="Arrow" />
+                </NavigationMenu.Indicator>
+              </NavigationMenu.List>
+            </NavigationMenu.Root>
+          </Box>
+          <Flex flexBasis="100%" direction="column">
+            <Card>
+              <Grid gap="4">
+                <Flex direction="column">
+                  <Text size="4" weight="medium">
+                    {currentPage}
+                  </Text>
+                  <Text>
+                    Obtained:{' '}
+                    <Text
+                      color={formatCurrentTabCountColour(
+                        currentTabObtained,
+                        currentTabTotal,
                       )}
-                    </Box>
-                    <Text align="center" size="2">{item.name}</Text>
-                  </Flex>
-                ))}
+                      weight="medium"
+                    >
+                      {currentTabObtained}/{currentTabTotal}
+                    </Text>
+                  </Text>
+                  {currentTabContents.killCounts.map((killCount) => (
+                    <Text key={killCount.name}>
+                      {killCount.name}:{' '}
+                      <Text weight="medium">{killCount.amount}</Text>
+                    </Text>
+                  ))}
+                </Flex>
+                <Separator size="4" />
+                <Grid columns="6" gap="6">
+                  {currentTabContents.items.map((item) => (
+                    <Flex
+                      key={item.id}
+                      align="center"
+                      direction="column"
+                      gap="4"
+                      justify="center"
+                      style={{
+                        opacity: item.quantity === 0 ? 0.5 : 1,
+                      }}
+                    >
+                      <Box position="relative">
+                        <EntityImage
+                          alt={`${item.name} icon`}
+                          src={formatWikiImageUrl(item.name)}
+                          fallback="?"
+                          size="3"
+                        />
+                        {item.quantity > 0 && (
+                          <Box position="absolute" top="-12px" left="-12px">
+                            <Text color="yellow" size="2" weight="medium">
+                              {item.quantity}
+                            </Text>
+                          </Box>
+                        )}
+                      </Box>
+                      <Text align="center" size="2">
+                        {item.name}
+                      </Text>
+                    </Flex>
+                  ))}
+                </Grid>
               </Grid>
-            </Grid>
-          </Card>
+            </Card>
+          </Flex>
         </Flex>
-      </>
+      </Flex>
     </Container>
   );
 }
