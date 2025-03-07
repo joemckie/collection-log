@@ -67,7 +67,7 @@ export default async function CollectionLogPage({
             ))}
           </TabNav.Root>
           <Card>
-            {/* @ts-ignore */}
+            {/* @ts-expect-error dev */}
             <pre>{JSON.stringify(collectionLog.tabs[currentTab][currentPage], null, 2)}</pre>
           </Card>
         </Flex>
