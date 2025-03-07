@@ -129,7 +129,7 @@ export default async function CollectionLogPage({
                 ))}
               </Flex>
               <Separator size="4" />
-              <Grid columns="repeat(auto-fill, 64px)" gap="4">
+              <Grid columns="6" gap="4">
                 {currentTabContents.items.map((item) => (
                   <Flex
                     key={item.id}
@@ -148,7 +148,7 @@ export default async function CollectionLogPage({
                       <Text>{item.name}</Text>
                       {item.quantity > 0 && (
                         <Box position="absolute" top="0" left="0">
-                          <Text color="yellow" size="2">
+                          <Text color="yellow" size="2" weight="medium">
                             {item.quantity}
                           </Text>
                         </Box>
