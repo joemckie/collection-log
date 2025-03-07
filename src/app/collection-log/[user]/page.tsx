@@ -12,6 +12,7 @@ import {
   RaidsTabEntry,
 } from '@/schemas/collection-log.schema';
 import {
+  Box,
   Card,
   Container,
   Flex,
@@ -34,6 +35,21 @@ type SearchParams = Promise<{
     | MinigamesTabEntry
     | OtherTabEntry;
 }>;
+
+function formatCurrentTabCountColour(
+  currentTabObtained: number,
+  currentTabTotal: number,
+) {
+  if (currentTabObtained === currentTabTotal) {
+    return 'green';
+  }
+
+  if (currentTabObtained === 0) {
+    return 'red';
+  }
+
+  return 'yellow';
+}
 
 export default async function CollectionLogPage({
   params,
@@ -88,29 +104,56 @@ export default async function CollectionLogPage({
             ))}
           </TabNav.Root>
           <Card>
-            <Grid gap="2">
-              <Flex direction="column" gap="1">
-                <Text>{currentPage}</Text>
+            <Grid gap="4">
+              <Flex direction="column">
+                <Text size="4" weight="medium">
+                  {currentPage}
+                </Text>
                 <Text>
-                  Obtained: {currentTabObtained} / {currentTabTotal}
+                  Obtained:{' '}
+                  <Text
+                    color={formatCurrentTabCountColour(
+                      currentTabObtained,
+                      currentTabTotal,
+                    )}
+                    weight="medium"
+                  >
+                    {currentTabObtained}/{currentTabTotal}
+                  </Text>
                 </Text>
                 {currentTabContents.killCounts.map((killCount) => (
                   <Text key={killCount.name}>
-                    {killCount.name}: {killCount.amount}
+                    {killCount.name}:{' '}
+                    <Text weight="medium">{killCount.amount}</Text>
                   </Text>
                 ))}
               </Flex>
               <Separator size="4" />
-              <Grid columns="6">
+              <Grid columns="repeat(auto-fill, 64px)" gap="4">
                 {currentTabContents.items.map((item) => (
-                  <Flex key={item.id} direction="column" gap="2">
+                  <Flex
+                    key={item.id}
+                    align="center"
+                    direction="column"
+                    gap="4"
+                    justify="center"
+                    position="relative"
+                  >
                     <EntityImage
                       alt={`${item.name} icon`}
                       src={formatWikiImageUrl(item.name)}
                       fallback="?"
                     />
-                    <Text>{item.name}</Text>
-                    <Text>{item.quantity}</Text>
+                    <Flex justify="between" gap="2">
+                      <Text>{item.name}</Text>
+                      {item.quantity > 0 && (
+                        <Box position="absolute" top="0" left="0">
+                          <Text color="yellow" size="2">
+                            {item.quantity}
+                          </Text>
+                        </Box>
+                      )}
+                    </Flex>
                   </Flex>
                 ))}
               </Grid>
