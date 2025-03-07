@@ -129,7 +129,7 @@ export default async function CollectionLogPage({
                 ))}
               </Flex>
               <Separator size="4" />
-              <Grid columns="6" gap="4">
+              <Grid columns="6" gap="6">
                 {currentTabContents.items.map((item) => (
                   <Flex
                     key={item.id}
@@ -137,26 +137,26 @@ export default async function CollectionLogPage({
                     direction="column"
                     gap="4"
                     justify="center"
-                    position="relative"
                     style={{
                       opacity: item.quantity === 0 ? 0.5 : 1,
                     }}
                   >
-                    <EntityImage
-                      alt={`${item.name} icon`}
-                      src={formatWikiImageUrl(item.name)}
-                      fallback="?"
-                    />
-                    <Flex justify="between" gap="2">
-                      <Text>{item.name}</Text>
+                    <Box position="relative">
+                      <EntityImage
+                        alt={`${item.name} icon`}
+                        src={formatWikiImageUrl(item.name)}
+                        fallback="?"
+                        size="3"
+                      />
                       {item.quantity > 0 && (
-                        <Box position="absolute" top="0" left="0">
+                        <Box position="absolute" top="-12px" left="-12px">
                           <Text color="yellow" size="2" weight="medium">
                             {item.quantity}
                           </Text>
                         </Box>
                       )}
-                    </Flex>
+                    </Box>
+                    <Text align="center" size="2">{item.name}</Text>
                   </Flex>
                 ))}
               </Grid>
