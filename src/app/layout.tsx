@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
 import '@radix-ui/themes/styles.css';
+import './globals.css';
 import { Flex, TextField, Theme, ThemePanel } from '@radix-ui/themes';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
@@ -29,7 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Theme appearance="dark" accentColor="gray">
-          <Flex align="center" justify="center" p="2">
+          <Flex align="center" justify="center" p="2" mb="2">
             <TextField.Root>
               <TextField.Slot>
                 <MagnifyingGlassIcon />

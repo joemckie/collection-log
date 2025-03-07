@@ -44,6 +44,7 @@ interface Props {
 function formatCurrentTabCountColour(
   currentTabObtained: number,
   currentTabTotal: number,
+  inProgressColor: 'yellow' | 'orange',
 ) {
   if (currentTabObtained === currentTabTotal) {
     return 'green';
@@ -53,7 +54,7 @@ function formatCurrentTabCountColour(
     return 'red';
   }
 
-  return 'yellow';
+  return inProgressColor;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -131,6 +132,12 @@ export default async function CollectionLogPage({
                       >
                     )[page].items.length;
 
+                    const tabColor = formatCurrentTabCountColour(
+                      obtained,
+                      total,
+                      'orange',
+                    );
+
                     return (
                       <NavigationMenu.Item key={page} className="rt-TabNavItem">
                         <NavigationMenu.Link
@@ -138,21 +145,12 @@ export default async function CollectionLogPage({
                           active={page === currentPage}
                           className="rt-reset rt-BaseTabListTrigger rt-TabNavLink"
                         >
-                          <Text
-                            color={formatCurrentTabCountColour(obtained, total)}
-                          >
+                          <Text color={tabColor}>
                             <Box asChild py="1">
                               <Link
                                 href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
                               >
-                                <Text
-                                  color={formatCurrentTabCountColour(
-                                    obtained,
-                                    total,
-                                  )}
-                                >
-                                  {page}
-                                </Text>
+                                <Text color={tabColor}>{page}</Text>
                               </Link>
                             </Box>
                           </Text>
@@ -177,6 +175,7 @@ export default async function CollectionLogPage({
                       color={formatCurrentTabCountColour(
                         currentTabObtained,
                         currentTabTotal,
+                        'yellow',
                       )}
                       weight="medium"
                     >

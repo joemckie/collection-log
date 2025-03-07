@@ -44,3 +44,17 @@ a {
 img.rt-AvatarImage {
   object-fit: scale-down;
 }
+
+.rt-BaseTabListTrigger:where([data-state="active"]), [data-active] {
+  font-weight: bold;
+}
+
+.radix-themes.dark {
+  --green-a11: #64bb3c;
+  --green-indicator: var(--green-a11);
+  --red-a11: #8b231b;
+  --red-indicator: var(--red-a11);
+  --orange-a11: #e89b3c;
+  --orange-indicator: var(--orange-a11);
+  --yellow-a11: #fcfe58;
+}
