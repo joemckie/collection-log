@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Theme appearance="dark" accentColor="red">
+        <Theme appearance="dark" accentColor="gray">
           <Flex align="center" justify="center" p="2">
             <TextField.Root>
               <TextField.Slot>

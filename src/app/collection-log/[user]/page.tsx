@@ -17,6 +17,7 @@ import {
   Container,
   Flex,
   Grid,
+  Heading,
   ScrollArea,
   Separator,
   TabNav,
@@ -81,10 +82,9 @@ export default async function CollectionLogPage({
     throw new Error(`No collection log found for user ${user}`);
   }
 
-  const currentTabContents = CollectionLogTabContents.parse(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (collectionLog.tabs[currentTab] as any)[currentPage],
-  );
+  const currentTabContents = (
+    collectionLog.tabs[currentTab] as Record<string, CollectionLogTabContents>
+  )[currentPage];
 
   const currentTabObtained = currentTabContents.items.filter(
     (item) => item.obtained,
@@ -94,7 +94,12 @@ export default async function CollectionLogPage({
 
   return (
     <Container>
-      <Flex direction="column" gap="2">
+      <Flex direction="column" gap="4">
+        <Heading align="center">
+          Collection Log - {collectionLog.uniqueObtained}/
+          {collectionLog.uniqueItems}
+        </Heading>
+        <Separator size="4" />
         <TabNav.Root>
           {Object.keys(collectionLogPageMap).map((tab) => (
             <TabNav.Link asChild active={tab === currentTab} key={tab}>
@@ -187,7 +192,7 @@ export default async function CollectionLogPage({
                 </Flex>
                 <Separator size="4" />
                 <ScrollArea style={{ maxHeight: 700 }}>
-                  <Grid columns="6" gap="6">
+                  <Grid columns="6" gap="6" pt="2">
                     {currentTabContents.items.map((item) => (
                       <Flex
                         key={item.id}
