@@ -157,6 +157,13 @@ export const CollectionLogTabContents = z.object({
       }),
     )
     .nonempty(),
+  killCounts: z.array(
+    z.object({
+      name: z.string().min(1),
+      amount: z.number().nonnegative(),
+      sequence: z.number().nonnegative(),
+    })
+  ),
 });
 
 export type CollectionLogTabContents = z.infer<typeof CollectionLogTabContents>;

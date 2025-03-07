@@ -36,6 +36,7 @@ export default async function CollectionLogPage({
     tab: currentTab = CollectionLogTab.enum.Raids,
     page: currentPage = collectionLogPageMap[currentTab].options[0],
   } = await searchParams;
+
   const collectionLog = await redis.json.get<CollectionLog>(
     `collection-log:${user}`,
   );
