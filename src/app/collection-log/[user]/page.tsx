@@ -1,14 +1,28 @@
 import { redis } from '@/redis';
 import {
+  BossesTabEntry,
+  CluesTabEntry,
   CollectionLog,
+  collectionLogPageMap,
   CollectionLogTab,
+  MinigamesTabEntry,
+  OtherTabEntry,
+  RaidsTabEntry,
 } from '@/schemas/collection-log.schema';
-import { Container, Flex, TabNav } from '@radix-ui/themes';
+import { Card, Container, Flex, TabNav } from '@radix-ui/themes';
 import Link from 'next/link';
 
 type Params = Promise<{ user: string }>;
 
-type SearchParams = Promise<{ tab: CollectionLogTab; page: string}>;
+type SearchParams = Promise<{
+  tab: CollectionLogTab;
+  page:
+    | RaidsTabEntry
+    | BossesTabEntry
+    | CluesTabEntry
+    | MinigamesTabEntry
+    | OtherTabEntry;
+}>;
 
 export default async function CollectionLogPage({
   params,
@@ -18,7 +32,10 @@ export default async function CollectionLogPage({
   searchParams: SearchParams;
 }) {
   const { user } = await params;
-  const { tab: currentTab = CollectionLogTab.enum.Raids, page = '' } = await searchParams;
+  const {
+    tab: currentTab = CollectionLogTab.enum.Raids,
+    page: currentPage = collectionLogPageMap[currentTab].options[0],
+  } = await searchParams;
   const collectionLog = await redis.json.get<CollectionLog>(
     `collection-log:${user}`,
   );
@@ -37,14 +54,22 @@ export default async function CollectionLogPage({
             </TabNav.Link>
           ))}
         </TabNav.Root>
-        <Flex>
+        <Flex direction="column" gap="2">
           <TabNav.Root wrap="wrap">
-            {Object.keys(collectionLog.tabs[currentTab]).map((page) => (
-              <TabNav.Link asChild key={page}>
-                <Link href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}>{page}</Link>
+            {collectionLogPageMap[currentTab].options.map((page) => (
+              <TabNav.Link asChild active={page === currentPage} key={page}>
+                <Link
+                  href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
+                >
+                  {page}
+                </Link>
               </TabNav.Link>
             ))}
           </TabNav.Root>
+          <Card>
+            {/* @ts-ignore */}
+            <pre>{JSON.stringify(collectionLog.tabs[currentTab][currentPage], null, 2)}</pre>
+          </Card>
         </Flex>
       </>
     </Container>
