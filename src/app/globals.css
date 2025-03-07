@@ -45,7 +45,8 @@ img.rt-AvatarImage {
   object-fit: scale-down;
 }
 
-.rt-BaseTabListTrigger:where([data-state="active"]), [data-active] {
+.rt-BaseTabListTrigger:where([data-state='active']),
+[data-active] {
   font-weight: bold;
 }
 

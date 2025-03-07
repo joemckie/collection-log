@@ -108,15 +108,11 @@ export default async function CollectionLogPage({
             </TabNav.Link>
           ))}
         </TabNav.Root>
-        <Flex gap="2">
+        <Flex gap="4">
           <Box asChild flexBasis="300px">
             <ScrollArea style={{ maxHeight: 700 }}>
-              <NavigationMenu.Root
-                defaultValue={currentPage}
-                className="NavigationMenuRoot"
-                orientation="vertical"
-              >
-                <NavigationMenu.List className="NavigationMenuList">
+              <NavigationMenu.Root orientation="vertical">
+                <NavigationMenu.List>
                   {collectionLogPageMap[currentTab].options.map((page) => {
                     const obtained = (
                       collectionLog.tabs[currentTab] as Record<
@@ -140,21 +136,38 @@ export default async function CollectionLogPage({
 
                     return (
                       <NavigationMenu.Item key={page} className="rt-TabNavItem">
-                        <NavigationMenu.Link
-                          asChild
-                          active={page === currentPage}
-                          className="rt-reset rt-BaseTabListTrigger rt-TabNavLink"
-                        >
-                          <Text color={tabColor}>
-                            <Box asChild py="1">
-                              <Link
-                                href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
-                              >
-                                <Text color={tabColor}>{page}</Text>
-                              </Link>
-                            </Box>
-                          </Text>
-                        </NavigationMenu.Link>
+                        <Box asChild display="block" width="100%">
+                          <NavigationMenu.Link
+                            asChild
+                            active={page === currentPage}
+                            className="rt-reset rt-BaseTabListTrigger rt-TabNavLink"
+                          >
+                            <Text align="left" color={tabColor}>
+                              <Box asChild py="1">
+                                <Link
+                                  href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
+                                >
+                                  <Flex asChild justify="start" width="100%">
+                                    <Text
+                                      align="left"
+                                      as="span"
+                                      color={tabColor}
+                                      className="rt-BaseTabListTriggerInner rt-TabNavLinkInner"
+                                    >
+                                      {page}
+                                    </Text>
+                                  </Flex>
+                                  <Text
+                                    as="span"
+                                    className="rt-BaseTabListTriggerInnerHidden rt-TabNavLinkInnerHidden"
+                                  >
+                                    {page}
+                                  </Text>
+                                </Link>
+                              </Box>
+                            </Text>
+                          </NavigationMenu.Link>
+                        </Box>
                       </NavigationMenu.Item>
                     );
                   })}
