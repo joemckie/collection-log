@@ -145,7 +145,6 @@ const OtherTabEntry = z.enum([
 export type OtherTabEntry = z.infer<typeof OtherTabEntry>;
 
 export const CollectionLogTabContents = z.object({
-  isUpdated: z.boolean(),
   items: z
     .array(
       z.object({
