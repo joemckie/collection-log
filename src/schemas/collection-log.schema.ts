@@ -132,7 +132,7 @@ const OtherTabEntry = z.enum([
   'TzHaar',
 ]);
 
-const CollectionLogTabContents = z.object({
+export const CollectionLogTabContents = z.object({
   isUpdated: z.boolean(),
   items: z
     .array(
@@ -146,6 +146,8 @@ const CollectionLogTabContents = z.object({
     )
     .nonempty(),
 });
+
+export type CollectionLogTabContents = z.infer<typeof CollectionLogTabContents>;
 
 export const CollectionLog = z.object({
   totalObtained: z.number().nonnegative(),
