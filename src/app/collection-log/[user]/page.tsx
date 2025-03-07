@@ -48,7 +48,7 @@ export default async function CollectionLogPage({
     <Container>
       <>
         <TabNav.Root>
-          {Object.keys(collectionLog.tabs).map((tab) => (
+          {Object.keys(collectionLogPageMap).map((tab) => (
             <TabNav.Link asChild active={tab === currentTab} key={tab}>
               <Link href={`/collection-log/${user}?tab=${tab}`}>{tab}</Link>
             </TabNav.Link>
