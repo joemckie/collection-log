@@ -161,7 +161,7 @@ export const CollectionLogTabContents = z.object({
       name: z.string().min(1),
       amount: z.number().nonnegative(),
       sequence: z.number().nonnegative(),
-    })
+    }),
   ),
 });
 

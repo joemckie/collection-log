@@ -46,10 +46,13 @@ export default async function CollectionLogPage({
     throw new Error(`No collection log found for user ${user}`);
   }
 
-  
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const currentTabContents = CollectionLogTabContents.parse((collectionLog.tabs[currentTab] as any)[currentPage]);
-  const currentTabObtained = currentTabContents.items.filter((item) => item.obtained).length;
+  const currentTabContents = CollectionLogTabContents.parse(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (collectionLog.tabs[currentTab] as any)[currentPage],
+  );
+  const currentTabObtained = currentTabContents.items.filter(
+    (item) => item.obtained,
+  ).length;
   const currentTabTotal = currentTabContents.items.length;
 
   return (
@@ -77,7 +80,9 @@ export default async function CollectionLogPage({
           <Card>
             <Flex direction="column" gap="1">
               <Text>{currentPage}</Text>
-              <Text>Obtained: {currentTabObtained} / {currentTabTotal}</Text>
+              <Text>
+                Obtained: {currentTabObtained} / {currentTabTotal}
+              </Text>
               {currentTabContents.killCounts.map((killCount) => (
                 <Text key={killCount.name}>
                   {killCount.name}: {killCount.amount}
