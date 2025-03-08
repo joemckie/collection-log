@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 const AccountType = z.enum([
-  'Normal',
-  'Ironman',
-  'Ultimate_Ironman',
-  'Hardcore_Ironman',
-  'Group_Ironman',
-  'Hardcore_Group_Ironman',
-  'Unranked_Group_Ironman',
-  'All',
+  'NORMAL',
+  'IRONMAN',
+  'ULTIMATE_IRONMAN',
+  'HARDCORE_IRONMAN',
+  'GROUP_IRONMAN',
+  'HARDCORE_GROUP_IRONMAN',
+  'UNRANKED_GROUP_IRONMAN',
+  'ALL',
 ]);
 
 export const User = z.object({

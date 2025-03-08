@@ -10,7 +10,7 @@ export const CollectionLogTab = z.enum([
 
 export type CollectionLogTab = z.infer<typeof CollectionLogTab>;
 
-const RaidsTabEntry = z.enum([
+export const RaidsTabEntry = z.enum([
   'Chambers of Xeric',
   'Theatre of Blood',
   'Tombs of Amascut',
@@ -18,7 +18,7 @@ const RaidsTabEntry = z.enum([
 
 export type RaidsTabEntry = z.infer<typeof RaidsTabEntry>;
 
-const BossesTabEntry = z.enum([
+export const BossesTabEntry = z.enum([
   'Abyssal Sire',
   'Alchemical Hydra',
   'Amoxliatl',
@@ -73,7 +73,7 @@ const BossesTabEntry = z.enum([
 
 export type BossesTabEntry = z.infer<typeof BossesTabEntry>;
 
-const CluesTabEntry = z.enum([
+export const CluesTabEntry = z.enum([
   'Beginner Treasure Trails',
   'Easy Treasure Trails',
   'Elite Treasure Trails',
@@ -88,7 +88,7 @@ const CluesTabEntry = z.enum([
 
 export type CluesTabEntry = z.infer<typeof CluesTabEntry>;
 
-const MinigamesTabEntry = z.enum([
+export const MinigamesTabEntry = z.enum([
   'Barbarian Assault',
   'Brimhaven Agility Arena',
   'Castle Wars',
@@ -113,7 +113,7 @@ const MinigamesTabEntry = z.enum([
 
 export type MinigamesTabEntry = z.infer<typeof MinigamesTabEntry>;
 
-const OtherTabEntry = z.enum([
+export const OtherTabEntry = z.enum([
   'Aerial Fishing',
   'All Pets',
   'Camdozaal',
@@ -143,6 +143,16 @@ const OtherTabEntry = z.enum([
 ]);
 
 export type OtherTabEntry = z.infer<typeof OtherTabEntry>;
+
+export const CollectionLogTabEntry = z.union([
+  RaidsTabEntry,
+  BossesTabEntry,
+  CluesTabEntry,
+  MinigamesTabEntry,
+  OtherTabEntry,
+])
+
+export type CollectionLogTabEntry = z.infer<typeof CollectionLogTabEntry>;
 
 export const CollectionLogTabContents = z.object({
   items: z
