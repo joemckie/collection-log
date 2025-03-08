@@ -8,8 +8,4 @@ const redisConfig = {
   },
 } satisfies Omit<RedisConfigNodejs, 'url' | 'token'>;
 
-export const redis = new Redis({
-  ...redisConfig,
-  url: serverConstants.redis.url,
-  token: serverConstants.redis.token,
-});
+export const redis = Redis.fromEnv(redisConfig);
