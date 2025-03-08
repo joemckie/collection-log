@@ -8,7 +8,7 @@ import { CollectionLogCategory } from './components/collection-log-category';
 import { Username } from '@/schemas/user.schema';
 import { clientConstants } from '@/config/constants.client';
 
-interface Props {
+interface UserCollectionLogPageProps {
   params: Promise<{ user: Username }>;
 }
 
@@ -16,25 +16,23 @@ export async function generateStaticParams() {
   return [];
 }
 
-async function fetchCollectionLog(user: Username) {
-  'use cache';
+export default async function UserCollectionLogPage({ params }: UserCollectionLogPageProps) {
+  async function fetchCollectionLog() {
+    const { user } = await params;
+    const response = await fetch(`${clientConstants.publicUrl}/api/collection-log/${user}`);
 
-  const response = await fetch(`${clientConstants.publicUrl}/api/collection-log/${user}`);
-
-  if (response.status === 404) {
-    throw new Error(`No collection log found for user ${user}`);
+    if (response.status === 404) {
+      throw new Error(`No collection log found for user ${user}`);
+    }
+  
+    if (!response.ok) {
+      throw new Error(`Failed to fetch collection log for user ${user}`);
+    }
+  
+    return CollectionLog.parse(await response.json());
   }
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch collection log for user ${user}`);
-  }
-
-  return CollectionLog.parse(await response.json());
-}
-
-export default async function UserCollectionLogPage({ params }: Props) {
-  const { user } = await params;
-  const collectionLog = await fetchCollectionLog(user);
+  const collectionLog = await fetchCollectionLog();
 
   return (
     <Container>
