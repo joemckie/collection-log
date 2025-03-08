@@ -18,7 +18,7 @@ export async function GET(
   const accountHash = await redis.get<string>(`user:${user}:accountHash`);
 
   if (!accountHash) {
-    return NextResponse.error();
+    return NextResponse.json(null, { status: 404 });
   }
 
   const data = await redis.json.get<[CollectionLogTabContents]>(

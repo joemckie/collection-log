@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   const data = await redis.json.set(`user:${accountHash}`, '$', user);
 
   if (!data) {
-    return NextResponse.error();
+    throw new Error('Failed to save user data');
   }
 
   await redis.set(`user:${user.username}:accountHash`, accountHash);
