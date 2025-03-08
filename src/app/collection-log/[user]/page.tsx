@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export function generateStaticParams() {
-  return []
+  return [];
 }
 
 export default async function UserCollectionLogPage({ params }: Props) {

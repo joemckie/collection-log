@@ -53,9 +53,7 @@ export function CollectionLogCategory({
                   return (
                     <Text color={tabColor} asChild key={page}>
                       <Tabs.Trigger value={page}>
-                        <Text color={tabColor} weight="medium">
-                          {page}
-                        </Text>
+                        <Text color={tabColor}>{page}</Text>
                       </Tabs.Trigger>
                     </Text>
                   );

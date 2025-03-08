@@ -45,11 +45,6 @@ img.rt-AvatarImage {
   object-fit: scale-down;
 }
 
-.rt-BaseTabListTrigger:where([data-state='active']),
-[data-active] {
-  font-weight: bold;
-}
-
 .radix-themes.dark {
   --green-a11: #64bb3c;
   --green-indicator: var(--green-a11);
@@ -58,4 +53,15 @@ img.rt-AvatarImage {
   --orange-a11: #e89b3c;
   --orange-indicator: var(--orange-a11);
   --yellow-a11: #fcfe58;
+}
+
+.rt-TabsList[data-orientation='vertical'] {
+  & .rt-TabsTrigger,
+  & .rt-TabsTriggerInner {
+    width: 100%;
+  }
+
+  & .rt-TabsTriggerInner {
+    justify-content: flex-start;
+  }
 }
