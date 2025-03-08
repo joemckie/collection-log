@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 async function fetchCollectionLog(user: Username) {
   'use cache';
 
-  const response = await fetch(`/api/${user}/collection-log`);
+  const response = await fetch(`/api/collection-log/${user}`);
 
   if (response.status === 404) {
     throw new Error(`No collection log found for user ${user}`);
