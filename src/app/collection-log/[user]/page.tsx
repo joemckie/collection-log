@@ -6,6 +6,7 @@ import {
 import { Container, Flex, Heading, Separator, Tabs } from '@radix-ui/themes';
 import { CollectionLogCategory } from './components/collection-log-category';
 import { Username } from '@/schemas/user.schema';
+import { clientConstants } from '@/config/constants.client';
 
 interface Props {
   params: Promise<{ user: Username }>;
@@ -18,7 +19,7 @@ export async function generateStaticParams() {
 async function fetchCollectionLog(user: Username) {
   'use cache';
 
-  const response = await fetch(`/api/collection-log/${user}`);
+  const response = await fetch(`${clientConstants.publicUrl}/api/collection-log/${user}`);
 
   if (response.status === 404) {
     throw new Error(`No collection log found for user ${user}`);
