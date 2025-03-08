@@ -3,31 +3,14 @@ import {
   CollectionLog,
   collectionLogPageMap,
   CollectionLogTab,
-  CollectionLogTabContents,
-  CollectionLogTabEntry,
 } from '@/schemas/collection-log.schema';
-import {
-  Box,
-  Card,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  ScrollArea,
-  Separator,
-} from '@radix-ui/themes';
+import { Container, Flex, Heading, Separator, Tabs } from '@radix-ui/themes';
 import { Metadata } from 'next';
-import { CollectionLogPage } from './components/collection-log-page';
-import { CollectionLogCategories } from './components/collection-log-categories';
-import { CollectionLogPageList } from './components/collection-log-page-list';
+import { CollectionLogCategory } from './components/collection-log-category';
 import { Username } from '@/schemas/user.schema';
 
 interface Props {
   params: Promise<{ user: Username }>;
-  searchParams: Promise<{
-    tab: CollectionLogTab;
-    page: CollectionLogTabEntry;
-  }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,15 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function UserCollectionLogPage({
-  params,
-  searchParams,
-}: Props) {
+export default async function UserCollectionLogPage({ params }: Props) {
   const { user } = await params;
-  const {
-    tab: currentTab = CollectionLogTab.enum.Bosses,
-    page: currentPage = collectionLogPageMap[currentTab].options[0],
-  } = await searchParams;
 
   const accountHash = await redis.get<string>(`user:${user}:account-hash`);
 
@@ -62,50 +38,33 @@ export default async function UserCollectionLogPage({
     throw new Error(`No collection log found for user ${user}`);
   }
 
-  const currentTabContents = (
-    collectionLog.tabs[currentTab] as Record<string, CollectionLogTabContents>
-  )[currentPage];
-
-  const currentTabObtained = currentTabContents.items.filter(
-    (item) => item.obtained,
-  ).length;
-
-  const currentTabTotal = currentTabContents.items.length;
-
   return (
     <Container>
-      <Flex direction="column" gap="4">
-        <Heading align="center">
-          Collection Log - {collectionLog.uniqueObtained}/
-          {collectionLog.uniqueItems}
-        </Heading>
-        <Separator size="4" />
-        <CollectionLogCategories user={user} currentTab={currentTab} />
-        <Flex gap="4">
-          <Box asChild flexBasis="300px">
-            <ScrollArea style={{ maxHeight: 700 }}>
-              <CollectionLogPageList
+      <Tabs.Root defaultValue={CollectionLogTab.enum.Bosses}>
+        <Flex direction="column" gap="4">
+          <Heading align="center">
+            Collection Log - {collectionLog.uniqueObtained}/
+            {collectionLog.uniqueItems}
+          </Heading>
+          <Separator size="4" />
+          <Tabs.List>
+            {Object.keys(collectionLogPageMap).map((tab) => (
+              <Tabs.Trigger value={tab} key={tab}>
+                {tab}
+              </Tabs.Trigger>
+            ))}
+          </Tabs.List>
+
+          {Object.keys(collectionLogPageMap).map((tab) => (
+            <Tabs.Content value={tab} key={tab}>
+              <CollectionLogCategory
                 collectionLog={collectionLog}
-                currentPage={currentPage}
-                currentTab={currentTab}
-                user={user}
+                currentTab={CollectionLogTab.parse(tab)}
               />
-            </ScrollArea>
-          </Box>
-          <Flex flexBasis="100%" direction="column">
-            <Card>
-              <Grid gap="4">
-                <CollectionLogPage
-                  obtained={currentTabObtained}
-                  page={currentTabContents}
-                  title={currentPage}
-                  total={currentTabTotal}
-                />
-              </Grid>
-            </Card>
-          </Flex>
+            </Tabs.Content>
+          ))}
         </Flex>
-      </Flex>
+      </Tabs.Root>
     </Container>
   );
 }

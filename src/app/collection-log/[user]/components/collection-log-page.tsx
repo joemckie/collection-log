@@ -9,17 +9,13 @@ import { formatCollectionLogIndicatorColor } from '@/app/utils/format-collection
 
 interface CollectionLogPageProps {
   title: CollectionLogTabEntry;
-  obtained: number;
-  total: number;
   page: CollectionLogTabContents;
 }
 
-export function CollectionLogPage({
-  title,
-  obtained,
-  total,
-  page,
-}: CollectionLogPageProps) {
+export function CollectionLogPage({ title, page }: CollectionLogPageProps) {
+  const obtained = page.items.filter((item) => item.obtained).length;
+  const total = page.items.length;
+
   return (
     <>
       <Flex direction="column">
