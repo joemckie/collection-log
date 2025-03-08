@@ -6,7 +6,6 @@ import {
 import { Container, Flex, Heading, Separator, Tabs } from '@radix-ui/themes';
 import { CollectionLogCategory } from './components/collection-log-category';
 import { Username } from '@/schemas/user.schema';
-import { redis } from '@/redis';
 
 interface Props {
   params: Promise<{ user: Username }>;
@@ -16,22 +15,25 @@ export async function generateStaticParams() {
   return [];
 }
 
-export default async function UserCollectionLogPage({ params }: Props) {
-  const { user } = await params;
+async function fetchCollectionLog(user: Username) {
+  'use cache';
 
-  const accountHash = await redis.get<string>(`user:${user}:account-hash`);
+  const response = await fetch(`/api/${user}/collection-log`);
 
-  if (!accountHash) {
-    throw new Error(`No account hash found for user ${user}`);
-  }
-
-  const collectionLog = await redis.json.get<CollectionLog>(
-    `collection-log:${accountHash}`,
-  );
-
-  if (!collectionLog) {
+  if (response.status === 404) {
     throw new Error(`No collection log found for user ${user}`);
   }
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch collection log for user ${user}`);
+  }
+
+  return CollectionLog.parse(await response.json());
+}
+
+export default async function UserCollectionLogPage({ params }: Props) {
+  const { user } = await params;
+  const collectionLog = await fetchCollectionLog(user);
 
   return (
     <Container>
