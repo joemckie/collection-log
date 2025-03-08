@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  Flex,
-  Grid,
-  ScrollArea,
-  Tabs,
-  Text,
-} from '@radix-ui/themes';
+import { Box, Card, Flex, ScrollArea, Tabs, Text } from '@radix-ui/themes';
 import {
   CollectionLog,
   collectionLogPageMap,
@@ -33,7 +25,7 @@ export function CollectionLogCategory({
     >
       <Flex gap="4">
         <Box asChild flexBasis="300px">
-          <Tabs.List>
+          <Tabs.List style={{ boxShadow: 'none' }}>
             <ScrollArea style={{ maxHeight: 700 }}>
               {Object.keys(collectionLog.tabs[currentTab])
                 .sort()
@@ -61,7 +53,9 @@ export function CollectionLogCategory({
                   return (
                     <Text color={tabColor} asChild key={page}>
                       <Tabs.Trigger value={page}>
-                        <Text color={tabColor} weight="medium">{page}</Text>
+                        <Text color={tabColor} weight="medium">
+                          {page}
+                        </Text>
                       </Tabs.Trigger>
                     </Text>
                   );
@@ -71,18 +65,16 @@ export function CollectionLogCategory({
         </Box>
         <Flex flexBasis="100%" direction="column">
           <Card>
-            <Grid gap="4">
-              {Object.entries(
-                collectionLog.tabs[CollectionLogTab.parse(currentTab)],
-              ).map(([page, contents]) => (
-                <Tabs.Content value={page} key={page}>
-                  <CollectionLogPage
-                    page={contents}
-                    title={CollectionLogTabEntry.parse(page)}
-                  />
-                </Tabs.Content>
-              ))}
-            </Grid>
+            {Object.entries(
+              collectionLog.tabs[CollectionLogTab.parse(currentTab)],
+            ).map(([title, page]) => (
+              <Tabs.Content value={title} key={title}>
+                <CollectionLogPage
+                  page={page}
+                  title={CollectionLogTabEntry.parse(title)}
+                />
+              </Tabs.Content>
+            ))}
           </Card>
         </Flex>
       </Flex>

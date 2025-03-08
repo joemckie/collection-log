@@ -17,7 +17,7 @@ export function CollectionLogPage({ title, page }: CollectionLogPageProps) {
   const total = page.items.length;
 
   return (
-    <>
+    <Flex gap="4" direction="column">
       <Flex direction="column">
         <Text size="4" weight="medium">
           {title}
@@ -73,6 +73,6 @@ export function CollectionLogPage({ title, page }: CollectionLogPageProps) {
           ))}
         </Grid>
       </ScrollArea>
-    </>
+    </Flex>
   );
 }
