@@ -1,9 +1,12 @@
 import { findPageCategory } from '@/app/utils/find-page-category';
 import { redis } from '@/redis';
-import { CollectionLogTabEntry, CollectionLogTabContents } from '@/schemas/collection-log.schema';
+import {
+  CollectionLogTabEntry,
+  CollectionLogTabContents,
+} from '@/schemas/collection-log.schema';
 import { NextRequest, NextResponse } from 'next/server';
 
-type Params = Promise<{ user: string; page: CollectionLogTabEntry; }>;
+type Params = Promise<{ user: string; page: CollectionLogTabEntry }>;
 
 export async function GET(
   _request: NextRequest,

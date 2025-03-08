@@ -1,4 +1,12 @@
-import { CollectionLogTabEntry, BossesTabEntry,CluesTabEntry, CollectionLogTab, MinigamesTabEntry, OtherTabEntry, RaidsTabEntry, CollectionLogTabContents} from '@/schemas/collection-log.schema';
+import {
+  CollectionLogTabEntry,
+  BossesTabEntry,
+  CluesTabEntry,
+  CollectionLogTab,
+  MinigamesTabEntry,
+  OtherTabEntry,
+  RaidsTabEntry,
+} from '@/schemas/collection-log.schema';
 
 export function findPageCategory(page: CollectionLogTabEntry) {
   if (BossesTabEntry.safeParse(page).success) {

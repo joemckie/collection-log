@@ -150,7 +150,7 @@ export const CollectionLogTabEntry = z.union([
   CluesTabEntry,
   MinigamesTabEntry,
   OtherTabEntry,
-])
+]);
 
 export type CollectionLogTabEntry = z.infer<typeof CollectionLogTabEntry>;
 
