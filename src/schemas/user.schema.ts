@@ -11,8 +11,12 @@ const AccountType = z.enum([
   'ALL',
 ]);
 
+export const Username = z.string().min(1).max(12);
+
+export type Username = z.infer<typeof Username>;
+
 export const User = z.object({
-  username: z.string().min(1).max(12),
+  username: Username,
   accountType: AccountType,
   isFemale: z.boolean(),
   accountHash: z.string().min(1),

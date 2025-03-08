@@ -1,15 +1,10 @@
-import { formatWikiImageUrl } from '@/app/utils/format-wiki-url';
 import { redis } from '@/redis';
 import {
-  BossesTabEntry,
-  CluesTabEntry,
   CollectionLog,
   collectionLogPageMap,
   CollectionLogTab,
   CollectionLogTabContents,
-  MinigamesTabEntry,
-  OtherTabEntry,
-  RaidsTabEntry,
+  CollectionLogTabEntry,
 } from '@/schemas/collection-log.schema';
 import {
   Box,
@@ -20,41 +15,19 @@ import {
   Heading,
   ScrollArea,
   Separator,
-  TabNav,
-  Text,
 } from '@radix-ui/themes';
-import Link from 'next/link';
-import { EntityImage } from '../components/entity-image';
-import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Metadata } from 'next';
+import { CollectionLogPage } from './components/collection-log-page';
+import { CollectionLogCategories } from './components/collection-log-categories';
+import { CollectionLogPageList } from './components/collection-log-page-list';
+import { Username } from '@/schemas/user.schema';
 
 interface Props {
-  params: Promise<{ user: string }>;
+  params: Promise<{ user: Username }>;
   searchParams: Promise<{
     tab: CollectionLogTab;
-    page:
-      | RaidsTabEntry
-      | BossesTabEntry
-      | CluesTabEntry
-      | MinigamesTabEntry
-      | OtherTabEntry;
+    page: CollectionLogTabEntry;
   }>;
-}
-
-function formatCurrentTabCountColour(
-  currentTabObtained: number,
-  currentTabTotal: number,
-  inProgressColor: 'yellow' | 'orange',
-) {
-  if (currentTabObtained === currentTabTotal) {
-    return 'green';
-  }
-
-  if (currentTabObtained === 0) {
-    return 'red';
-  }
-
-  return inProgressColor;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -65,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function CollectionLogPage({
+export default async function UserCollectionLogPage({
   params,
   searchParams,
 }: Props) {
@@ -107,143 +80,27 @@ export default async function CollectionLogPage({
           {collectionLog.uniqueItems}
         </Heading>
         <Separator size="4" />
-        <TabNav.Root>
-          {Object.keys(collectionLogPageMap).map((tab) => (
-            <TabNav.Link asChild active={tab === currentTab} key={tab}>
-              <Link href={`/collection-log/${user}?tab=${tab}`}>{tab}</Link>
-            </TabNav.Link>
-          ))}
-        </TabNav.Root>
+        <CollectionLogCategories user={user} currentTab={currentTab} />
         <Flex gap="4">
           <Box asChild flexBasis="300px">
             <ScrollArea style={{ maxHeight: 700 }}>
-              <NavigationMenu.Root orientation="vertical">
-                <NavigationMenu.List>
-                  {collectionLogPageMap[currentTab].options.map((page) => {
-                    const obtained = (
-                      collectionLog.tabs[currentTab] as Record<
-                        string,
-                        CollectionLogTabContents
-                      >
-                    )[page].items.filter((item) => item.obtained).length;
-
-                    const total = (
-                      collectionLog.tabs[currentTab] as Record<
-                        string,
-                        CollectionLogTabContents
-                      >
-                    )[page].items.length;
-
-                    const tabColor = formatCurrentTabCountColour(
-                      obtained,
-                      total,
-                      'orange',
-                    );
-
-                    return (
-                      <NavigationMenu.Item key={page} className="rt-TabNavItem">
-                        <Box asChild display="block" width="100%">
-                          <NavigationMenu.Link
-                            asChild
-                            active={page === currentPage}
-                            className="rt-reset rt-BaseTabListTrigger rt-TabNavLink"
-                          >
-                            <Text align="left" color={tabColor}>
-                              <Box asChild py="1">
-                                <Link
-                                  href={`/collection-log/${user}?tab=${currentTab}&page=${page}`}
-                                >
-                                  <Flex asChild justify="start" width="100%">
-                                    <Text
-                                      align="left"
-                                      as="span"
-                                      color={tabColor}
-                                      className="rt-BaseTabListTriggerInner rt-TabNavLinkInner"
-                                    >
-                                      {page}
-                                    </Text>
-                                  </Flex>
-                                  <Text
-                                    as="span"
-                                    className="rt-BaseTabListTriggerInnerHidden rt-TabNavLinkInnerHidden"
-                                  >
-                                    {page}
-                                  </Text>
-                                </Link>
-                              </Box>
-                            </Text>
-                          </NavigationMenu.Link>
-                        </Box>
-                      </NavigationMenu.Item>
-                    );
-                  })}
-                </NavigationMenu.List>
-              </NavigationMenu.Root>
+              <CollectionLogPageList
+                collectionLog={collectionLog}
+                currentPage={currentPage}
+                currentTab={currentTab}
+                user={user}
+              />
             </ScrollArea>
           </Box>
           <Flex flexBasis="100%" direction="column">
             <Card>
               <Grid gap="4">
-                <Flex direction="column">
-                  <Text size="4" weight="medium">
-                    {currentPage}
-                  </Text>
-                  <Text>
-                    Obtained:{' '}
-                    <Text
-                      color={formatCurrentTabCountColour(
-                        currentTabObtained,
-                        currentTabTotal,
-                        'yellow',
-                      )}
-                      weight="medium"
-                    >
-                      {currentTabObtained}/{currentTabTotal}
-                    </Text>
-                  </Text>
-                  {currentTabContents.killCounts.map((killCount) => (
-                    <Text key={killCount.name}>
-                      {killCount.name}:{' '}
-                      <Text weight="medium">{killCount.amount}</Text>
-                    </Text>
-                  ))}
-                </Flex>
-                <Separator size="4" />
-                <ScrollArea style={{ maxHeight: 700 }}>
-                  <Grid columns="6" gap="6" pt="2">
-                    {currentTabContents.items.map((item) => (
-                      <Flex
-                        key={item.id}
-                        align="center"
-                        direction="column"
-                        gap="4"
-                        justify="center"
-                        style={{
-                          opacity: item.quantity === 0 ? 0.5 : 1,
-                        }}
-                      >
-                        <Box position="relative">
-                          <EntityImage
-                            alt={`${item.name} icon`}
-                            src={formatWikiImageUrl(item.name)}
-                            fallback="?"
-                            size="3"
-                          />
-                          {item.quantity > 0 && (
-                            <Box position="absolute" top="-12px" left="-12px">
-                              <Text color="yellow" size="2" weight="medium">
-                                {item.quantity}
-                              </Text>
-                            </Box>
-                          )}
-                        </Box>
-                        <Text align="center" size="2">
-                          {item.name}
-                        </Text>
-                      </Flex>
-                    ))}
-                  </Grid>
-                </ScrollArea>
+                <CollectionLogPage
+                  obtained={currentTabObtained}
+                  page={currentTabContents}
+                  title={currentPage}
+                  total={currentTabTotal}
+                />
               </Grid>
             </Card>
           </Flex>
