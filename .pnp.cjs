@@ -51,6 +51,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.5.3"],\
           ["react", "npm:19.0.0"],\
           ["react-dom", "virtual:0f0d3c0033891564aefdb02f8f0a9c053a43c1d77862043c9d3a76c6b546a41141a634f4766e9c118dd2e395e6d3d765fd7a14897e7d31368f37cb59ea7beac2#npm:19.0.0"],\
+          ["server-only", "npm:0.0.1"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
           ["zod", "npm:3.24.2"]\
         ],\
@@ -5171,6 +5172,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.5.3"],\
           ["react", "npm:19.0.0"],\
           ["react-dom", "virtual:0f0d3c0033891564aefdb02f8f0a9c053a43c1d77862043c9d3a76c6b546a41141a634f4766e9c118dd2e395e6d3d765fd7a14897e7d31368f37cb59ea7beac2#npm:19.0.0"],\
+          ["server-only", "npm:0.0.1"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
           ["zod", "npm:3.24.2"]\
         ],\
@@ -8663,6 +8665,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/semver-npm-7.7.1-4572475307-4cfa1eb91e.zip/node_modules/semver/",\
         "packageDependencies": [\
           ["semver", "npm:7.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["server-only", [\
+      ["npm:0.0.1", {\
+        "packageLocation": "./.yarn/cache/server-only-npm-0.0.1-24bf42bde2-c432348956.zip/node_modules/server-only/",\
+        "packageDependencies": [\
+          ["server-only", "npm:0.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
