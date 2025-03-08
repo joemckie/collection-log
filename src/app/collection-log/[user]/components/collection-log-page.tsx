@@ -58,7 +58,7 @@ export function CollectionLogPage({ title, page }: CollectionLogPageProps) {
                   fallback="?"
                   size="3"
                 />
-                {item.quantity > 0 && (
+                {item.quantity > 1 && (
                   <Box position="absolute" top="-12px" left="-12px">
                     <Text color="yellow" size="2" weight="medium">
                       {item.quantity}
