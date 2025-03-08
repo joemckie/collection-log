@@ -15,7 +15,7 @@ export async function GET(
   const { page, user } = await params;
   const category = findPageCategory(page);
 
-  const accountHash = await redis.get<string>(`user:${user}:accountHash`);
+  const accountHash = await redis.get<string>(`user:${user}:account-hash`);
 
   if (!accountHash) {
     return NextResponse.json(null, { status: 404 });

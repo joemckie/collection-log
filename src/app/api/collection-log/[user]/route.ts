@@ -9,7 +9,7 @@ export async function GET(
   { params }: { params: Params },
 ) {
   const { user } = await params;
-  const accountHash = await redis.get<string>(`user:${user}:accountHash`);
+  const accountHash = await redis.get<string>(`user:${user}:account-hash`);
 
   if (!accountHash) {
     return NextResponse.json(null, { status: 404 });
@@ -24,10 +24,10 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Params },
 ) {
-  const { user } = await params;
+  const { user: accountHash } = await params;
   const data = CollectionLog.parse(await request.json());
 
-  await redis.json.set(`collection-log:${user}`, '$', data);
+  await redis.json.set(`collection-log:${accountHash}`, '$', data);
 
   return NextResponse.json({ success: true });
 }
@@ -37,7 +37,7 @@ export async function DELETE(
   { params }: { params: Params },
 ) {
   const { user } = await params;
-  const accountHash = await redis.get<string>(`user:${user}:accountHash`);
+  const accountHash = await redis.get<string>(`user:${user}:account-hash`);
 
   if (!accountHash) {
     return NextResponse.json(null, { status: 404 });
