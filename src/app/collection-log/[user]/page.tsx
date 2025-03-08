@@ -5,20 +5,11 @@ import {
   CollectionLogTab,
 } from '@/schemas/collection-log.schema';
 import { Container, Flex, Heading, Separator, Tabs } from '@radix-ui/themes';
-import { Metadata } from 'next';
 import { CollectionLogCategory } from './components/collection-log-category';
 import { Username } from '@/schemas/user.schema';
 
 interface Props {
   params: Promise<{ user: Username }>;
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { user } = await params;
-
-  return {
-    title: `Collection Log - ${user}`,
-  };
 }
 
 export function generateStaticParams() {
