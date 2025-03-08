@@ -21,6 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+export function generateStaticParams() {
+  return []
+}
+
 export default async function UserCollectionLogPage({ params }: Props) {
   const { user } = await params;
 
