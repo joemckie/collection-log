@@ -75,8 +75,14 @@ export default async function CollectionLogPage({
     page: currentPage = collectionLogPageMap[currentTab].options[0],
   } = await searchParams;
 
+  const accountHash = await redis.get<string>(`user:${user}:account-hash`);
+
+  if (!accountHash) {
+    throw new Error(`No account hash found for user ${user}`);
+  }
+
   const collectionLog = await redis.json.get<CollectionLog>(
-    `collection-log:${user}`,
+    `collection-log:${accountHash}`,
   );
 
   if (!collectionLog) {
