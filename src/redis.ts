@@ -4,7 +4,7 @@ import { serverConstants } from './config/constants.server';
 const redisConfig = {
   keepAlive: false,
   retry: {
-    retries: parseInt(process.env.REDIS_RETRIES ?? '0', 10),
+    retries: serverConstants.redis.retries,
   },
 } satisfies Omit<RedisConfigNodejs, 'url' | 'token'>;
 
