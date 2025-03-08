@@ -26,13 +26,8 @@ export async function PUT(
 ) {
   const { user } = await params;
   const data = CollectionLog.parse(await request.json());
-  const accountHash = await redis.get<string>(`user:${user}:accountHash`);
 
-  if (!accountHash) {
-    return NextResponse.json(null, { status: 404 });
-  }
-
-  await redis.json.set(`collection-log:${accountHash}`, '$', data);
+  await redis.json.set(`collection-log:${user}`, '$', data);
 
   return NextResponse.json({ success: true });
 }
