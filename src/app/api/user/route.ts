@@ -1,16 +1,29 @@
-import { redis } from '@/redis';
+'use server';
+
 import { User } from '@/schemas/user.schema';
 import { NextRequest, NextResponse } from 'next/server';
+import * as Sentry from '@sentry/nextjs';
+import { UserEntity } from '@/entities/user.entity';
+import { AppDataSource } from '@/database';
 
 export async function POST(request: NextRequest) {
-  const { accountHash, ...user } = User.parse(await request.json());
-  const data = await redis.json.set(`user:${accountHash}`, '$', user);
+  const { userSettings, ...data } = User.parse(await request.json());
+  const userRepository = AppDataSource.getRepository(UserEntity);
 
-  if (!data) {
-    throw new Error('Failed to save user data');
+  try {
+    await userRepository.upsert(
+      {
+        ...data,
+        displayRank: userSettings.displayRank,
+        showQuantity: userSettings.showQuantity,
+      },
+      ['accountHash'],
+    );
+  } catch (e) {
+    Sentry.captureException(e);
+
+    return NextResponse.json(null, { status: 500 });
   }
-
-  await redis.set(`user:${user.username}:account-hash`, accountHash);
 
   return NextResponse.json({ success: true });
 }

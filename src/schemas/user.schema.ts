@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const AccountType = z.enum([
+export const AccountType = z.enum([
   'NORMAL',
   'IRONMAN',
   'ULTIMATE_IRONMAN',
@@ -11,15 +11,17 @@ const AccountType = z.enum([
   'ALL',
 ]);
 
+export type AccountType = z.infer<typeof AccountType>;
+
 export const Username = z.string().min(1).max(12);
 
 export type Username = z.infer<typeof Username>;
 
 export const User = z.object({
-  username: Username,
+  accountHash: z.string().min(1),
   accountType: AccountType,
   isFemale: z.boolean(),
-  accountHash: z.string().min(1),
+  username: Username,
   userSettings: z.object({
     displayRank: AccountType,
     showQuantity: z.boolean(),

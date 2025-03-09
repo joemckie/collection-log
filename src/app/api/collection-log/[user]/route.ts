@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CollectionLog } from '@/schemas/collection-log.schema';
-import { unstable_cacheTag as cacheTag } from 'next/cache'
+import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { redis } from '@/redis';
+import { AppDataSource } from '@/database';
+import { CollectionLogEntity } from '@/entities/collection-log.entity';
+import { UserEntity } from '@/entities/user.entity';
 
 type Params = Promise<{ user: string }>;
 
@@ -11,17 +14,17 @@ export async function GET(
 ) {
   async function getCollectionLog() {
     'use cache';
-    
+
     const { user } = await params;
-  
+
     const accountHash = await redis.get<string>(`user:${user}:account-hash`);
-  
+
     if (!accountHash) {
       return null;
     }
-    
+
     cacheTag('collection-log', accountHash);
-  
+
     return redis.json.get<CollectionLog>(`collection-log:${accountHash}`);
   }
 
@@ -40,8 +43,23 @@ export async function PUT(
 ) {
   const { user: accountHash } = await params;
   const data = CollectionLog.parse(await request.json());
+  const collectionLogRepository =
+    AppDataSource.getRepository(CollectionLogEntity);
+  const userRepository = AppDataSource.getRepository(UserEntity);
 
-  await redis.json.set(`collection-log:${accountHash}`, '$', data);
+  await userRepository.findOneOrFail({
+    where: { accountHash },
+  });
+
+  const collectionLog = await collectionLogRepository.save({
+    accountHash,
+    collectionLog: data,
+  });
+
+  await userRepository.save({
+    accountHash,
+    collectionLog,
+  });
 
   return NextResponse.json({ success: true });
 }

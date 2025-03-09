@@ -16,19 +16,23 @@ export async function generateStaticParams() {
   return [];
 }
 
-export default async function UserCollectionLogPage({ params }: UserCollectionLogPageProps) {
+export default async function UserCollectionLogPage({
+  params,
+}: UserCollectionLogPageProps) {
   async function fetchCollectionLog() {
     const { user } = await params;
-    const response = await fetch(`${clientConstants.publicUrl}/api/collection-log/${user}`);
+    const response = await fetch(
+      `${clientConstants.publicUrl}/api/collection-log/${user}`,
+    );
 
     if (response.status === 404) {
       throw new Error(`No collection log found for user ${user}`);
     }
-  
+
     if (!response.ok) {
       throw new Error(`Failed to fetch collection log for user ${user}`);
     }
-  
+
     return CollectionLog.parse(await response.json());
   }
 

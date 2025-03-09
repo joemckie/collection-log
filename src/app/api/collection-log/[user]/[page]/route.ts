@@ -18,15 +18,15 @@ export async function GET(
   'use cache';
 
   const { page, user } = await params;
-  
+
   const category = findPageCategory(page);
-  
+
   const accountHash = await redis.get<string>(`user:${user}:account-hash`);
-  
+
   if (!accountHash) {
     return NextResponse.json(null, { status: 404 });
   }
-  
+
   cacheTag('collection-log', accountHash, page);
 
   const data = await redis.json.get<[CollectionLogTabContents]>(

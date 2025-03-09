@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   experimental: {
     useCache: true,
   },
+  serverExternalPackages: ['typeorm'],
   images: {
     remotePatterns: [
       {

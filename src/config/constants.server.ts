@@ -1,6 +1,10 @@
+import 'server-only';
 import { z } from 'zod';
 
 const ServerConfigSchema = z.object({
+  postgres: z.object({
+    databaseUrl: z.string(),
+  }),
   redis: z.object({
     retries: z.number(),
     token: z.string(),
@@ -9,6 +13,9 @@ const ServerConfigSchema = z.object({
 });
 
 export const serverConstants = ServerConfigSchema.parse({
+  postgres: {
+    databaseUrl: process.env.DATABASE_URL,
+  },
   redis: {
     retries: parseInt(process.env.REDIS_RETRIES ?? '0', 10),
     token:
